@@ -1,0 +1,5 @@
+Manivtha Tours & Travels currently explains trip costs manually whenever customers ask why a package costs a certain amount. Staff members must review transportation, accommodation, food, sightseeing, taxes, and service charges before giving an explanation. This process consumes time, varies between employees, and can lead to inconsistent customer communication.
+
+As customer inquiries increase, manually generating detailed cost explanations becomes difficult and may delay responses. Customers often expect quick and understandable breakdowns that justify the overall package price.
+
+The AI Trip Cost Breakdown Narrator addresses this challenge by automatically generating clear and engaging explanations from trip details such as customer name, destination, package amount, and included services. The system ensures consistency, reduces staff workload, and improves customer understanding of travel package pricing.

@@ -1,0 +1,5 @@
+The AI Trip Cost Breakdown Narrator is an intelligent system designed to automatically generate customer-friendly explanations for travel package pricing. The solution uses prompt engineering techniques to structure trip information into a detailed AI prompt that guides the language model to produce accurate and engaging narratives.
+
+The backend receives trip details including customer name, destination, package type, and total amount. These details are processed and sent to an AI API such as OpenAI or Gemini. The AI model analyzes the information and generates a natural language explanation describing the factors contributing to the package cost.
+
+The generated narrative is returned to the application and displayed to staff or customers through a web interface. This workflow improves consistency, reduces manual effort, and provides transparent communication regarding travel package pricing.
