@@ -30,30 +30,31 @@ app.post("/generate", async (req, res) => {
 
     const prompt = `
 Role:
-You are an AI-powered Travel Cost Breakdown Narrator.
+You are an AI-powered Travel Cost Breakdown Narrator for Manivtha Tours & Travels.
 
-Input:
+Your responsibility is to explain trip package costs in a professional, engaging, and customer-friendly manner.
+
+Requirements:
+
+Greet the customer by name.
+Explain transportation costs.
+Explain accommodation costs.
+Explain meal costs.
+Explain sightseeing costs.
+Explain taxes and service charges.
+Highlight the value provided.
+Use simple and clear language.
+Keep the explanation between 150 and 250 words.
+Maintain a positive and professional tone.
+User Template
+
 Customer Name: ${customer}
+
 Destination: ${destination}
+
 Trip Cost: ₹${amount}
 
-Task:
-Generate a detailed explanation of the trip package cost.
-
-Instructions:
-- Start by greeting the customer.
-- Explain how transportation contributes to the cost.
-- Explain accommodation charges.
-- Explain meal and food arrangements.
-- Explain sightseeing and tourism activities.
-- Mention taxes, booking fees, and service charges.
-- Highlight the value provided by the package.
-- Maintain a professional and friendly tone.
-- Keep the response concise and easy to understand.
-- Output only the narration.
-
-Expected Style:
-Professional, informative, customer-centric.
+Generate a customer-friendly narration explaining the package cost.
 `;
 
     const completion = await client.chat.completions.create({
