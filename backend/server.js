@@ -125,7 +125,7 @@ Closing Message
 
 `;
 
-
+const startTime = Date.now();
     const completion = await client.chat.completions.create({
       model: "openrouter/auto",
       messages: [
@@ -136,6 +136,9 @@ Closing Message
       ],
       temperature: 0.7,
     });
+    const endTime = Date.now();
+
+const responseTimeMs = endTime - startTime;
 
     const narration = completion.choices[0].message.content;
     
@@ -157,6 +160,7 @@ const record = {
   promptVersion: "V4",
   response: narration,
   timestamp: new Date().toISOString(),
+  response_time_ms: responseTimeMs
 };
 
 history.unshift(record);
@@ -175,9 +179,10 @@ if (!narration) {
 }
 
     res.json({
-      success: true,
-      narration,
-    });
+  success: true,
+  narration,
+  response_time_ms: responseTimeMs
+});
   } catch (error) {
   console.error("OPENROUTER ERROR:", error);
 
