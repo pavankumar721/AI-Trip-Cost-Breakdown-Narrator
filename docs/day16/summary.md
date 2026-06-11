@@ -53,7 +53,6 @@ Sample Response:
 3. Rating 2 submitted successfully
 4. Rating 5 submitted successfully
 5. Rating 3 submitted successfully
-
 ### Analytics Tests
 
 Verified:

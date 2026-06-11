@@ -345,6 +345,55 @@ app.get("/api/analytics/quality", (req, res) => {
     });
   }
 });
+app.get("/api/admin/analytics", (req, res) => {
+  try {
+    const historyPath = path.join(__dirname, "history.json");
+    const feedbackPath = path.join(__dirname, "feedback.json");
+
+    const history = fs.existsSync(historyPath)
+      ? JSON.parse(fs.readFileSync(historyPath, "utf8"))
+      : [];
+
+    const feedback = fs.existsSync(feedbackPath)
+      ? JSON.parse(fs.readFileSync(feedbackPath, "utf8"))
+      : [];
+
+    const totalGenerations = history.length;
+
+    const totalFeedback = feedback.length;
+
+    const averageRating =
+      totalFeedback > 0
+        ? (
+            feedback.reduce((sum, item) => sum + item.rating, 0) /
+            totalFeedback
+          ).toFixed(2)
+        : 0;
+
+    const destinationCounts = {};
+
+    history.forEach((item) => {
+      destinationCounts[item.destination] =
+        (destinationCounts[item.destination] || 0) + 1;
+    });
+
+    const topInputs = Object.entries(destinationCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
+
+    res.json({
+      totalGenerations,
+      totalFeedback,
+      averageRating,
+      topInputs,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
 
 const PORT = process.env.PORT || 5000;
 
