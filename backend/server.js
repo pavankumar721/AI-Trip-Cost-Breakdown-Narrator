@@ -104,6 +104,11 @@ Rules:
 6. Avoid repetitive phrases.
 7. Highlight customer value.
 8. End with a positive closing statement.
+9. Mention one attractive feature of the destination.
+10. Use unique closing wording.
+11. Sound like an experienced travel consultant.
+12. Make package value summary persuasive.
+13. Keep narration engaging and customer-focused.
 
 Output Format:
 
