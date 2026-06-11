@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const OpenAI = require("openai");
+const fs = require("fs");
 
 const app = express();
 
@@ -131,6 +132,34 @@ Closing Message
     });
 
     const narration = completion.choices[0].message.content;
+    
+    const historyFile = "history.json";
+
+let history = [];
+
+if (fs.existsSync(historyFile)) {
+  history = JSON.parse(
+    fs.readFileSync(historyFile, "utf8")
+  );
+}
+
+const record = {
+  id: Date.now(),
+  customer,
+  destination,
+  amount: tripAmount,
+  promptVersion: "V3",
+  response: narration,
+  timestamp: new Date().toISOString(),
+};
+
+history.unshift(record);
+
+fs.writeFileSync(
+  historyFile,
+  JSON.stringify(history, null, 2)
+);
+
 
 if (!narration) {
   return res.status(500).json({
@@ -166,6 +195,50 @@ if (!narration) {
   });
 }
 });
+app.get("/api/history", (req, res) => {
+
+  const historyFile = "history.json";
+
+  if (!fs.existsSync(historyFile)) {
+    return res.json([]);
+  }
+
+  const history = JSON.parse(
+    fs.readFileSync(historyFile, "utf8")
+  );
+
+  res.json(history);
+
+});
+
+app.get("/api/history/:id", (req, res) => {
+
+  const historyFile = "history.json";
+
+  if (!fs.existsSync(historyFile)) {
+    return res.status(404).json({
+      error: "No history found"
+    });
+  }
+
+  const history = JSON.parse(
+    fs.readFileSync(historyFile, "utf8")
+  );
+
+  const record = history.find(
+    item => item.id == req.params.id
+  );
+
+  if (!record) {
+    return res.status(404).json({
+      error: "Record not found"
+    });
+  }
+
+  res.json(record);
+
+});
+
 
 const PORT = process.env.PORT || 5000;
 
