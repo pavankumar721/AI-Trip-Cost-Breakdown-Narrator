@@ -10,3 +10,6 @@
  8     Arjun     Hyderabad    4.5    
  9     Meera     Mysore       4.2    
  10    Kiran     Delhi        4.6    
+
+
+ Total Score  -->  43.5 / 10 = 4.35

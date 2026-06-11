@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const OpenAI = require("openai");
 const fs = require("fs");
+const path = require("path");
 
 const app = express();
 
@@ -244,6 +245,106 @@ app.get("/api/history/:id", (req, res) => {
 
 });
 
+app.post("/api/feedback", (req, res) => {
+  try {
+    const { generation_id, rating, comment } = req.body;
+
+    if (!generation_id) {
+      return res.status(400).json({
+        success: false,
+        error: "generation_id is required",
+      });
+    }
+
+    if (!rating) {
+      return res.status(400).json({
+        success: false,
+        error: "rating is required",
+      });
+    }
+
+    if (rating < 1 || rating > 5) {
+      return res.status(400).json({
+        success: false,
+        error: "rating must be between 1 and 5",
+      });
+    }
+
+    const feedbackPath = path.join(__dirname, "feedback.json");
+
+    let feedback = [];
+
+    if (fs.existsSync(feedbackPath)) {
+      feedback = JSON.parse(
+        fs.readFileSync(feedbackPath, "utf8")
+      );
+    }
+
+    const newFeedback = {
+      id: Date.now(),
+      generation_id,
+      rating,
+      comment: comment || "",
+      timestamp: new Date().toISOString(),
+    };
+
+    feedback.push(newFeedback);
+
+    fs.writeFileSync(
+      feedbackPath,
+      JSON.stringify(feedback, null, 2)
+    );
+
+    res.json({
+      success: true,
+      message: "Feedback saved successfully",
+      feedback: newFeedback,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+app.get("/api/analytics/quality", (req, res) => {
+  try {
+    const feedbackPath = path.join(__dirname, "feedback.json");
+
+    if (!fs.existsSync(feedbackPath)) {
+      return res.json({
+        totalFeedback: 0,
+        averageRating: 0,
+      });
+    }
+
+    const feedback = JSON.parse(
+      fs.readFileSync(feedbackPath, "utf8")
+    );
+
+    const totalFeedback = feedback.length;
+
+    const averageRating =
+      totalFeedback > 0
+        ? (
+            feedback.reduce(
+              (sum, item) => sum + item.rating,
+              0
+            ) / totalFeedback
+          ).toFixed(2)
+        : 0;
+
+    res.json({
+      totalFeedback,
+      averageRating,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
 
 const PORT = process.env.PORT || 5000;
 
