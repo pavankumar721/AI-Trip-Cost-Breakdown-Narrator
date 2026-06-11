@@ -18,26 +18,59 @@ app.get("/", (req, res) => {
   res.send("AI Trip Cost Breakdown Narrator Backend Running");
 });
 
-app.post("/generate", async (req, res) => {
+app.post("/api/generate", async (req, res) => {
   try {
     const { customer, destination, amount } = req.body;
+    
 
-    if (!customer || !destination || !amount) {
-      return res.status(400).json({
-        error: "customer, destination and amount are required",
-      });
-    }
-const transportation = Math.round(amount * 0.35);
-const accommodation = Math.round(amount * 0.30);
-const meals = Math.round(amount * 0.20);
-const sightseeing = Math.round(amount * 0.10);
+    
+    
+    if (!customer) {
+  return res.status(400).json({
+    success: false,
+    error: "Customer name is required",
+  });
+}
+
+if (!destination) {
+  return res.status(400).json({
+    success: false,
+    error: "Destination is required",
+  });
+}
+
+if (amount === undefined || amount === null || amount === "") {
+  return res.status(400).json({
+    success: false,
+    error: "Amount is required",
+  });
+
+   
+
+}
+const tripAmount = Number(amount);
+
+if (isNaN(tripAmount) || tripAmount <= 0) {
+  return res.status(400).json({
+    success: false,
+    error: "Amount must be a positive number",
+  });
+
+
+}
+const transportation = Math.round(tripAmount * 0.30);
+const accommodation = Math.round(tripAmount * 0.35);
+const meals = Math.round(tripAmount * 0.15);
+const sightseeing = Math.round(tripAmount * 0.10);
 
 const taxes =
-  amount -
-  (transportation +
-   accommodation +
-   meals +
-   sightseeing);
+  tripAmount -
+  (
+    transportation +
+    accommodation +
+    meals +
+    sightseeing
+  );
 
     const prompt = `
 # Prompt V3
@@ -51,7 +84,7 @@ Generate a personalized and customer-friendly explanation of a travel package co
 Customer Details:
 Customer Name: ${customer}
 Destination: ${destination}
-Total Package Cost: ₹${amount}
+Total Package Cost: ₹${tripAmount}
 
 Verified Cost Breakdown:
 Transportation: ₹${transportation}
@@ -99,18 +132,39 @@ Closing Message
 
     const narration = completion.choices[0].message.content;
 
+if (!narration) {
+  return res.status(500).json({
+    success: false,
+    error: "AI returned an empty response",
+  });
+}
+
     res.json({
       success: true,
       narration,
     });
   } catch (error) {
-    console.error("OPENROUTER ERROR:", error);
+  console.error("OPENROUTER ERROR:", error);
 
-    res.status(500).json({
+  if (error.status === 401) {
+    return res.status(401).json({
       success: false,
-      error: error.message,
+      error: "Invalid API Key",
     });
   }
+
+  if (error.status === 429) {
+    return res.status(429).json({
+      success: false,
+      error: "Rate limit exceeded. Please try again later.",
+    });
+  }
+
+  res.status(500).json({
+    success: false,
+    error: "Internal Server Error",
+  });
+}
 });
 
 const PORT = process.env.PORT || 5000;
