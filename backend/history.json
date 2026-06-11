@@ -1,5 +1,14 @@
 [
   {
+    "id": 1781175037820,
+    "customer": "Kiran",
+    "destination": "Delhi",
+    "amount": 35000,
+    "promptVersion": "V3",
+    "response": "**Greeting**\n\nHello Kiran, thank you for choosing Manivtha Tours & Travels for your upcoming adventure to Delhi! We're thrilled to help you explore the vibrant capital.\n\n**Trip Cost Breakdown**\n\nHere's a clear and straightforward breakdown of your total package cost of ₹35000 for your Delhi experience:\n\n**Explanation of Each Component**\n\n*   **Transportation:** This component, valued at ₹10500, covers your comfortable and convenient travel arrangements, ensuring you reach your destination and move around with ease.\n*   **Accommodation:** For your stay, ₹12250 has been allocated to ensure you have a relaxing and pleasant lodging experience.\n*   **Meals:** We've set aside ₹5250 to ensure you can savor delicious and authentic culinary delights throughout your journey.\n*   **Sightseeing & Activities:** To immerse you in the rich culture and history of Delhi, ₹3500 is dedicated to your engaging sightseeing tours and memorable activities.\n*   **Taxes & Service Charges:** The remaining ₹3500 covers all applicable taxes and service charges, providing you with a transparent and hassle-free experience.\n\n**Package Value Summary**\n\nKiran, this ₹35000 package is meticulously designed to offer you exceptional value. You're not just paying for services; you're investing in a seamless and enriching exploration of Delhi. From comfortable journeys to delightful meals and access to its iconic landmarks, every element has been curated to maximize your enjoyment and create lasting memories. The bustling Chandni Chowk, with its vibrant bazaars and delicious street food, is just one of the many treasures awaiting you.\n\n**Closing Message**\n\nWe are confident that your trip to Delhi will be an unforgettable experience. We've taken care of all the details so you can focus on soaking in the magic of this incredible city. We look forward to crafting more extraordinary journeys for you in the future!\n\nWarm regards,\n\nYour dedicated Travel Consultant at Manivtha Tours & Travels",
+    "timestamp": "2026-06-11T10:50:37.820Z"
+  },
+  {
     "id": 1781173584563,
     "customer": "Kiran",
     "destination": "Delhi",

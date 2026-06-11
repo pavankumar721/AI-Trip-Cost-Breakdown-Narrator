@@ -74,7 +74,7 @@ const taxes =
   );
 
     const prompt = `
-# Prompt V3
+# Prompt V4
 
 Role:
 You are a professional Travel Cost Breakdown Narrator for Manivtha Tours & Travels.
@@ -153,7 +153,7 @@ const record = {
   customer,
   destination,
   amount: tripAmount,
-  promptVersion: "V3",
+  promptVersion: "V4",
   response: narration,
   timestamp: new Date().toISOString(),
 };
