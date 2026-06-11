@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1781182193456,
+    "generation_id": "123",
+    "rating": 5,
+    "comment": "Very useful explanation",
+    "timestamp": "2026-06-11T12:49:53.456Z"
+  },
+  {
+    "id": 1781183084164,
+    "generation_id": "124",
+    "rating": 4,
+    "comment": "Good explanation, but the closing message could be more engaging.",
+    "timestamp": "2026-06-11T13:04:44.164Z"
+  },
+  {
+    "id": 1781183133266,
+    "generation_id": "125",
+    "rating": 2,
+    "comment": "Good explanation, but the closing message could be more engaging.",
+    "timestamp": "2026-06-11T13:05:33.266Z"
+  },
+  {
+    "id": 1781183153622,
+    "generation_id": "126",
+    "rating": 5,
+    "comment": "Destination details made the narration feel personalized.",
+    "timestamp": "2026-06-11T13:05:53.622Z"
+  },
+  {
+    "id": 1781183177310,
+    "generation_id": "127",
+    "rating": 3,
+    "comment": "Useful output but somewhat repetitive.",
+    "timestamp": "2026-06-11T13:06:17.310Z"
+  }
+]

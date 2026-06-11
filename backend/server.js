@@ -3,6 +3,8 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const OpenAI = require("openai");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
 
@@ -73,7 +75,7 @@ const taxes =
   );
 
     const prompt = `
-# Prompt V3
+# Prompt V4
 
 Role:
 You are a professional Travel Cost Breakdown Narrator for Manivtha Tours & Travels.
@@ -103,6 +105,11 @@ Rules:
 6. Avoid repetitive phrases.
 7. Highlight customer value.
 8. End with a positive closing statement.
+9. Mention one attractive feature of the destination.
+10. Use unique closing wording.
+11. Sound like an experienced travel consultant.
+12. Make package value summary persuasive.
+13. Keep narration engaging and customer-focused.
 
 Output Format:
 
@@ -131,6 +138,34 @@ Closing Message
     });
 
     const narration = completion.choices[0].message.content;
+    
+    const historyFile = "history.json";
+
+let history = [];
+
+if (fs.existsSync(historyFile)) {
+  history = JSON.parse(
+    fs.readFileSync(historyFile, "utf8")
+  );
+}
+
+const record = {
+  id: Date.now(),
+  customer,
+  destination,
+  amount: tripAmount,
+  promptVersion: "V4",
+  response: narration,
+  timestamp: new Date().toISOString(),
+};
+
+history.unshift(record);
+
+fs.writeFileSync(
+  historyFile,
+  JSON.stringify(history, null, 2)
+);
+
 
 if (!narration) {
   return res.status(500).json({
@@ -165,6 +200,199 @@ if (!narration) {
     error: "Internal Server Error",
   });
 }
+});
+app.get("/api/history", (req, res) => {
+
+  const historyFile = "history.json";
+
+  if (!fs.existsSync(historyFile)) {
+    return res.json([]);
+  }
+
+  const history = JSON.parse(
+    fs.readFileSync(historyFile, "utf8")
+  );
+
+  res.json(history);
+
+});
+
+app.get("/api/history/:id", (req, res) => {
+
+  const historyFile = "history.json";
+
+  if (!fs.existsSync(historyFile)) {
+    return res.status(404).json({
+      error: "No history found"
+    });
+  }
+
+  const history = JSON.parse(
+    fs.readFileSync(historyFile, "utf8")
+  );
+
+  const record = history.find(
+    item => item.id == req.params.id
+  );
+
+  if (!record) {
+    return res.status(404).json({
+      error: "Record not found"
+    });
+  }
+
+  res.json(record);
+
+});
+
+app.post("/api/feedback", (req, res) => {
+  try {
+    const { generation_id, rating, comment } = req.body;
+
+    if (!generation_id) {
+      return res.status(400).json({
+        success: false,
+        error: "generation_id is required",
+      });
+    }
+
+    if (!rating) {
+      return res.status(400).json({
+        success: false,
+        error: "rating is required",
+      });
+    }
+
+    if (rating < 1 || rating > 5) {
+      return res.status(400).json({
+        success: false,
+        error: "rating must be between 1 and 5",
+      });
+    }
+
+    const feedbackPath = path.join(__dirname, "feedback.json");
+
+    let feedback = [];
+
+    if (fs.existsSync(feedbackPath)) {
+      feedback = JSON.parse(
+        fs.readFileSync(feedbackPath, "utf8")
+      );
+    }
+
+    const newFeedback = {
+      id: Date.now(),
+      generation_id,
+      rating,
+      comment: comment || "",
+      timestamp: new Date().toISOString(),
+    };
+
+    feedback.push(newFeedback);
+
+    fs.writeFileSync(
+      feedbackPath,
+      JSON.stringify(feedback, null, 2)
+    );
+
+    res.json({
+      success: true,
+      message: "Feedback saved successfully",
+      feedback: newFeedback,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+app.get("/api/analytics/quality", (req, res) => {
+  try {
+    const feedbackPath = path.join(__dirname, "feedback.json");
+
+    if (!fs.existsSync(feedbackPath)) {
+      return res.json({
+        totalFeedback: 0,
+        averageRating: 0,
+      });
+    }
+
+    const feedback = JSON.parse(
+      fs.readFileSync(feedbackPath, "utf8")
+    );
+
+    const totalFeedback = feedback.length;
+
+    const averageRating =
+      totalFeedback > 0
+        ? (
+            feedback.reduce(
+              (sum, item) => sum + item.rating,
+              0
+            ) / totalFeedback
+          ).toFixed(2)
+        : 0;
+
+    res.json({
+      totalFeedback,
+      averageRating,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+app.get("/api/admin/analytics", (req, res) => {
+  try {
+    const historyPath = path.join(__dirname, "history.json");
+    const feedbackPath = path.join(__dirname, "feedback.json");
+
+    const history = fs.existsSync(historyPath)
+      ? JSON.parse(fs.readFileSync(historyPath, "utf8"))
+      : [];
+
+    const feedback = fs.existsSync(feedbackPath)
+      ? JSON.parse(fs.readFileSync(feedbackPath, "utf8"))
+      : [];
+
+    const totalGenerations = history.length;
+
+    const totalFeedback = feedback.length;
+
+    const averageRating =
+      totalFeedback > 0
+        ? (
+            feedback.reduce((sum, item) => sum + item.rating, 0) /
+            totalFeedback
+          ).toFixed(2)
+        : 0;
+
+    const destinationCounts = {};
+
+    history.forEach((item) => {
+      destinationCounts[item.destination] =
+        (destinationCounts[item.destination] || 0) + 1;
+    });
+
+    const topInputs = Object.entries(destinationCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
+
+    res.json({
+      totalGenerations,
+      totalFeedback,
+      averageRating,
+      topInputs,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
 });
 
 const PORT = process.env.PORT || 5000;
