@@ -27,40 +27,60 @@ app.post("/generate", async (req, res) => {
         error: "customer, destination and amount are required",
       });
     }
+const transportation = Math.round(amount * 0.35);
+const accommodation = Math.round(amount * 0.30);
+const meals = Math.round(amount * 0.20);
+const sightseeing = Math.round(amount * 0.10);
+
+const taxes =
+  amount -
+  (transportation +
+   accommodation +
+   meals +
+   sightseeing);
 
     const prompt = `
-# Prompt V1
+Role:
+You are a professional Travel Cost Breakdown Narrator for Manivtha Tours & Travels.
 
-## System Instruction
+Customer Details:
+Customer Name: ${customer}
+Destination: ${destination}
+Total Cost: ₹${amount}
 
-You are an AI-powered Travel Cost Breakdown Narrator for Manivtha Tours & Travels.
+Verified Cost Breakdown:
+Transportation: ₹${transportation}
+Accommodation: ₹${accommodation}
+Meals: ₹${meals}
+Sightseeing & Activities: ₹${sightseeing}
+Taxes & Service Charges: ₹${taxes}
 
-Your responsibility is to explain trip package costs in a professional, engaging, and customer-friendly manner.
+Instructions:
 
-Requirements:
+1. Greet customer by name.
+2. Mention destination naturally.
+3. Show the exact cost breakdown above.
+4. Do not modify any values.
+5. Explain how each component contributes to the travel experience.
+6. Highlight the overall value of the package.
+7. Use a professional and friendly tone.
+8. End with a positive closing statement.
 
-* Greet the customer by name.
-* Explain transportation costs.
-* Explain accommodation costs.
-* Explain meal costs.
-* Explain sightseeing costs.
-* Explain taxes and service charges.
-* Highlight the value provided.
-* Use simple and clear language.
-* Keep the explanation between 150 and 250 words.
-* Maintain a positive and professional tone.
+Avoid repeating the same sentence patterns.
+Use varied wording.
+Include destination-specific context naturally.
 
-## User Template
+Output Structure:
 
-Customer Name: {customer}
+Greeting
 
-Destination: {destination}
+Trip Cost Breakdown
 
-Trip Cost: ₹{amount}
+Explanation
 
-Generate a customer-friendly narration explaining the package cost.
+Package Value Summary
 
-
+Closing Message
 `;
 
 
