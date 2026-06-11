@@ -1,5 +1,14 @@
 [
   {
+    "id": 1781171036975,
+    "customer": "Pavan",
+    "destination": "Goa",
+    "amount": 10000,
+    "promptVersion": "V3",
+    "response": "Hello Pavan,\n\nThank you for choosing Manivtha Tours & Travels for your upcoming trip to the beautiful beaches of Goa! We're delighted to present a clear and comprehensive breakdown of your package cost, totaling ₹10000.\n\nHere's how your Goa adventure is being financed:\n\n*   **Transportation:** ₹3000 has been allocated to ensure your comfortable and seamless travel to and from Goa, and for all your local commutes during the trip.\n*   **Accommodation:** ₹3500 is dedicated to your stay, securing you a pleasant and well-appointed place to relax and rejuvenate after your exciting days.\n*   **Meals:** ₹1500 covers your delicious dining experiences, allowing you to savor the local flavors and enjoy satisfying meals throughout your journey.\n*   **Sightseeing & Activities:** ₹1000 is set aside for exploring the vibrant sights and engaging in exciting activities that Goa has to offer, ensuring you experience the best of this destination.\n*   **Taxes & Service Charges:** ₹1000 covers all applicable government taxes and service charges, ensuring a transparent and hassle-free experience.\n\nThis ₹10000 package is designed to provide you with excellent value, covering all the essential elements for a memorable and enjoyable Goa getaway.\n\nWe are confident that your trip will be filled with wonderful experiences and lasting memories. We look forward to making your Goa holiday truly special!",
+    "timestamp": "2026-06-11T09:43:56.975Z"
+  },
+  {
     "id": 1781169417227,
     "customer": "Vicky",
     "destination": "Kurnool",
