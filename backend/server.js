@@ -394,6 +394,65 @@ app.get("/api/admin/analytics", (req, res) => {
     });
   }
 });
+app.get("/api/templates", (req, res) => {
+  try {
+    const templatesPath = path.join(__dirname, "templates.json");
+
+    const templates = JSON.parse(
+      fs.readFileSync(templatesPath, "utf8")
+    );
+
+    res.json(templates);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+app.post("/api/templates", (req, res) => {
+  try {
+    const { name, customer, destination, amount } = req.body;
+
+    if (!name || !customer || !destination || !amount) {
+      return res.status(400).json({
+        success: false,
+        error: "All fields are required",
+      });
+    }
+
+    const templatesPath = path.join(__dirname, "templates.json");
+
+    const templates = JSON.parse(
+      fs.readFileSync(templatesPath, "utf8")
+    );
+
+    const newTemplate = {
+      id: Date.now(),
+      name,
+      customer,
+      destination,
+      amount,
+    };
+
+    templates.push(newTemplate);
+
+    fs.writeFileSync(
+      templatesPath,
+      JSON.stringify(templates, null, 2)
+    );
+
+    res.json({
+      success: true,
+      template: newTemplate,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
 
 const PORT = process.env.PORT || 5000;
 

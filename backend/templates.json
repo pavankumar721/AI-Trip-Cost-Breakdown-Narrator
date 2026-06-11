@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "Goa Budget",
+    "customer": "Demo Customer",
+    "destination": "Goa",
+    "amount": 10000
+  },
+  {
+    "id": 2,
+    "name": "Kerala Family",
+    "customer": "Demo Customer",
+    "destination": "Kerala",
+    "amount": 25000
+  },
+  {
+    "id": 1781197639636,
+    "name": "Kashmir Luxury",
+    "customer": "Demo",
+    "destination": "Kashmir",
+    "amount": 50000
+  },
+  {
+    "id": 1781198236179,
+    "name": "Kashmir Luxury",
+    "customer": "Demo",
+    "destination": "Kashmir",
+    "amount": 50000
+  }
+]
